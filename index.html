@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reborn 新生留学 · 口语跟读小助手</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* ===== 全局重置 & 字体 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #F9F7E8;
+            color: #121212;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== 顶部导航 ===== */
+        .topbar {
+            background: #F8789C;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            max-width: 1280px;
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 2px 12px rgba(248, 120, 156, 0.15);
+        }
+
+        .topbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar .brand i {
+            font-size: 1.6rem;
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 16px;
+        }
+
+        .topbar .brand h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.3px;
+        }
+
+        .topbar .brand .badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        .topbar .user {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .topbar .user .greeting {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #FFFFFF;
+        }
+
+        .topbar .user .date {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+        }
+
+        .topbar .user .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* ===== 主容器 ===== */
+        .main-container {
+            max-width: 1280px;
+            width: 100%;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ===== 主卡片 ===== */
+        .main-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 28px 32px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.03);
+        }
+
+        .main-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .main-card .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #121212;
+        }
+
+        .main-card .card-header h2 i {
+            color: #48A89E;
+            margin-right: 10px;
+        }
+
+        .main-card .card-header .badge {
+            background: #E4EDD8;
+            color: #48A89E;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ===== 统计卡片 ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        .stat-card {
+            border-radius: 18px;
+            padding: 16px 18px;
+            background: #E4EDD8;
+        }
+        .stat-card.pink {
+            background: #F9E1E8;
+        }
+        .stat-card.orange {
+            background: #F7E0C9;
+        }
+        .stat-card.purple {
+            background: #E9D8E9;
+        }
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            color: #777770;
+            font-weight: 500;
+        }
+        .stat-card .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #121212;
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+        .stat-card .stat-sub {
+            font-size: 0.7rem;
+            color: #A3A39A;
+            margin-top: 2px;
+        }
+
+        /* ===== 输入方式切换 ===== */
+        .input-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .input-methods .tab {
+            padding: 8px 22px;
+            border-radius: 40px;
+            background: #F9F7E8;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+            color: #777770;
+        }
+        .input-methods .tab.active {
+            background: #48A89E;
+            color: #FFFFFF;
+            border-color: #48A89E;
+        }
+        .input-methods .tab i {
+            margin-right: 6px;
+        }
+
+        .text-input-box {
+            width: 100%;
+            min-height: 140px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1.5px solid #D1D0C8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            background: #F9F7E8;
+            resize: vertical;
+            transition: 0.2s;
+            color: #121212;
+        }
+        .text-input-box:focus {
+            outline: none;
+            border-color: #48A89E;
+            box-shadow: 0 0 0 4px rgba(72, 168, 158, 0.08);
+        }
+
+        .file-upload-area {
+            border: 2px dashed #D1D0C8;
+            border-radius: 18px;
+            padding: 32px 20px;
+            text-align: center;
+            background: #F9F7E8;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .file-upload-area:hover {
+            border-color: #48A89E;
+            background: #F4F9E8;
+        }
+        .file-upload-area i {
+            font-size: 2rem;
+            color: #48A89E;
+        }
+
+        /* ===== 声线选择 ===== */
+        .voice-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 6px 0 10px;
+        }
+        .voice-btn {
+            padding: 8px 22px;
+            border-radius: 40px;
+            border: 1.5px solid #D1D0C8;
+            background: #F9F7E8;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #121212;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .voice-btn:hover {
+            border-color: #48A89E;
+            background: #E4EDD8;
+        }
+        .voice-btn.active {
+            border-color: #48A89E;
+            background: #48A89E;
+            color: #FFFFFF;
+        }
+        .voice-btn .voice-label {
+            font-weight: 400;
+            color: #777770;
+        }
+        .voice-btn.active .voice-label {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ===== 按钮 ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #48A89E;
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(72, 168, 158, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(72, 168, 158, 0.30);
+        }
+        .btn-secondary {
+            background: #FFC252;
+            color: #121212;
+            box-shadow: 0 4px 14px rgba(255, 194, 82, 0.25);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(255, 194, 82, 0.30);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #D1D0C8;
+            color: #121212;
+        }
+        .btn-outline:hover {
+            border-color: #48A89E;
+            background: rgba(72, 168, 158, 0.05);
+        }
+        .btn-danger {
+            background: #e74c6f;
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(231, 76, 111, 0.20);
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(231, 76, 111, 0.25);
+        }
+        .btn-sm {
+            padding: 6px 18px;
+            font-size: 0.8rem;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-16 { margin-top: 16px; }
+        .mt-20 { margin-top: 20px; }
+        .gap-8 { gap: 8px; }
+
+        /* ===== 句子列表 ===== */
+        .sentences-list {
+            max-height: 280px;
+            overflow-y: auto;
+            border-radius: 16px;
+            border: 1px solid #F9F7E8;
+            background: #F9F7E8;
+        }
+        .sentence-item {
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid #E8E6D8;
+            background: #FFFFFF;
+            transition: 0.1s;
+        }
+        .sentence-item:last-child {
+            border-bottom: none;
+        }
+        .sentence-item .num {
+            background: #48A89E;
+            color: #FFFFFF;
+            width: 26px;
+            height: 26px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .sentence-item .text {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #121212;
+        }
+        .sentence-item .play-single {
+            background: none;
+            border: none;
+            color: #48A89E;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .sentence-item .play-single:hover {
+            background: #E4EDD8;
+        }
+
+        /* ===== 结果链接 ===== */
+        .url-box {
+            background: #F9F7E8;
+            border-radius: 16px;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border: 1px solid #E8E6D8;
+        }
+        .url-box .url-text {
+            font-family: 'SF Mono', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: #121212;
+            word-break: break-all;
+            flex: 1;
+        }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            text-align: center;
+            padding: 18px 28px;
+            color: #A3A39A;
+            font-size: 0.8rem;
+            border-top: 1px solid #E8E6D8;
+            background: #F9F7E8;
+            width: 100%;
+            max-width: 1280px;
+            margin-top: auto;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 720px) {
+            .topbar {
+                padding: 12px 16px;
+                border-radius: 0;
+            }
+            .topbar .brand h1 {
+                font-size: 1.1rem;
+            }
+            .topbar .user .greeting,
+            .topbar .user .date {
+                font-size: 0.75rem;
+            }
+            .main-container {
+                padding: 12px 16px;
+            }
+            .main-card {
+                padding: 18px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .voice-selector {
+                gap: 8px;
+            }
+            .voice-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== 学生端 ===== */
+        .student-container .topbar {
+            border-radius: 0 0 24px 24px;
+            max-width: 1280px;
+            width: 100%;
+        }
+        .student-container .main-container {
+            max-width: 1280px;
+            padding: 24px 32px;
+        }
+        .student-container .main-card {
+            background: #FFFFFF;
+        }
+        .student-container .sentence-item.active-sentence {
+            background: #E4EDD8;
+            border-radius: 12px;
+        }
+        @media (max-width: 720px) {
+            .student-container .main-container {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== 顶部栏 ===== -->
+<header class="topbar">
+    <div class="brand">
+        <i class="fas fa-feather-alt"></i>
+        <h1>Reborn 新生留学</h1>
+        <span class="badge">口语跟读</span>
+    </div>
+    <div class="user">
+        <span class="greeting">天天进步，每日新生！</span>
+        <span class="date" id="currentDate">加载中...</span>
+        <div class="avatar">T</div>
+    </div>
+</header>
+
+<!-- ===== 主容器 ===== -->
+<div class="main-container" id="teacherApp">
+
+    <!-- 主卡片：创建练习 -->
+    <div class="main-card">
+        <div class="card-header">
+            <h2><i class="fas fa-pen-fancy"></i> 创建口语跟读练习</h2>
+            <span class="badge"><i class="far fa-clock"></i> 支持文本 / 文档</span>
+        </div>
+
+        <!-- 输入方式 -->
+        <div class="input-methods">
+            <span class="tab active" id="textTab"><i class="fas fa-keyboard"></i> 直接输入</span>
+            <span class="tab" id="fileTab"><i class="fas fa-cloud-upload-alt"></i> 上传文档</span>
+        </div>
+
+        <!-- 文本输入 -->
+        <div id="textInputContainer">
+            <textarea class="text-input-box" id="textInput" placeholder="粘贴英文口语练习内容，例如对话、短文、常用表达……"></textarea>
+            <div style="text-align:right; margin-top:6px; color:#A3A39A; font-size:0.85rem;"><span id="wordCount">0</span> 词</div>
+        </div>
+
+        <!-- 文件上传 -->
+        <div id="fileUploadContainer" class="hidden">
+            <div class="file-upload-area" id="fileUploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p style="font-weight:500; margin:6px 0; color:#121212;">点击或拖拽文件到此</p>
+                <div style="color:#A3A39A; font-size:0.8rem;">支持 .txt .doc .docx .xls .xlsx .pdf</div>
+                <button class="btn-outline" style="margin-top:8px; padding:6px 18px; border-radius:40px; border:1.5px solid #D1D0C8; background:transparent; cursor:pointer; font-weight:500;" id="fileSelectBtn"><i class="fas fa-folder-open"></i> 选择文件</button>
+                <input type="file" id="fileInput" class="hidden" accept=".txt,.doc,.docx,.xls,.xlsx,.pdf">
+            </div>
+            <div id="fileInfo" class="hidden" style="margin-top:12px; padding:10px 16px; background:#E4EDD8; border-radius:14px;">
+                <i class="fas fa-file-alt" style="color:#48A89E;"></i> <span id="fileName"></span> (<span id="fileSize"></span>)
+            </div>
+        </div>
+
+        <!-- 声线选择 -->
+        <div style="margin: 10px 0 4px;">
+            <span style="font-weight:500; font-size:0.85rem; color:#777770; margin-right:10px;"><i class="fas fa-user-edit"></i> 声线选择</span>
+        </div>
+        <div class="voice-selector" id="voiceSelector">
+            <button class="voice-btn active" data-voice="ms-henge">Ms. Henge <span class="voice-label">英音</span></button>
+            <button class="voice-btn" data-voice="lily">Lily <span class="voice-label">美音</span></button>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex-row" style="margin-top:16px;">
+            <button class="btn btn-primary" id="processBtn"><i class="fas fa-cogs"></i> 处理内容</button>
+            <button class="btn btn-secondary" id="generateBtn" disabled><i class="fas fa-link"></i> 生成练习链接</button>
+            <button class="btn btn-danger" id="clearBtn"><i class="fas fa-trash-alt"></i> 清空</button>
+        </div>
+
+        <!-- 统计信息（处理完成后显示） -->
+        <div id="statsContainer" class="hidden mt-16">
+            <hr style="border:none; border-top:2px solid #E8E6D8; margin-bottom:16px;" />
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card"><div class="stat-label">总词数</div><div class="stat-number" id="statTotalWords">0</div></div>
+                <div class="stat-card pink"><div class="stat-label">总句数</div><div class="stat-number" id="statTotalSentences">0</div></div>
+                <div class="stat-card orange"><div class="stat-label">平均每句长度</div><div class="stat-number" id="statAvgLength">0</div><div class="stat-sub">词</div></div>
+                <div class="stat-card purple"><div class="stat-label">全篇预估总时长</div><div class="stat-number" id="statDuration">0</div><div class="stat-sub">秒</div></div>
+            </div>
+        </div>
+
+        <!-- 断句预览 & 测试 -->
+        <div id="sentencePreviewContainer" class="hidden mt-16">
+            <hr style="border:none; border-top:2px solid #E8E6D8; margin-bottom:18px;" />
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <h3 style="font-weight:700; font-size:1.05rem; color:#121212;"><i class="fas fa-list-ul" style="color:#48A89E;"></i> 断句预览</h3>
+                <span style="color:#777770;">共 <span id="sentenceCount">0</span> 句</span>
+            </div>
+            <div class="sentences-list" id="sentencesList"></div>
+
+            <!-- 试听 -->
+            <div id="playTestContainer" class="hidden" style="margin-top:18px; background:#F9F7E8; border-radius:16px; padding:16px 20px; border:1px solid #E8E6D8;">
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <span style="font-weight:500; color:#121212;"><i class="fas fa-headphones" style="color:#48A89E;"></i> 试听</span>
+                    <span id="testSentence" style="background:#FFFFFF; padding:4px 16px; border-radius:40px; flex:1; font-size:0.95rem; border:1px solid #E8E6D8;">This is a test sentence.</span>
+                    <button class="btn btn-primary btn-sm" id="testPlayBtn"><i class="fas fa-volume-up"></i> 播放</button>
+                    <button class="btn btn-outline btn-sm" id="testNextBtn"><i class="fas fa-forward"></i> 下一句</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果：学生链接 -->
+        <div id="resultContainer" class="hidden mt-20">
+            <hr style="border:none; border-top:2px solid #E8E6D8; margin-bottom:18px;" />
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                <span style="background:#E4EDD8; color:#48A89E; padding:2px 14px; border-radius:40px; font-weight:600; font-size:0.85rem;"><i class="fas fa-check-circle"></i> 已生成</span>
+                <span style="font-weight:500; color:#121212;">学生练习链接</span>
+            </div>
+            <div class="url-box">
+                <span class="url-text" id="studentUrl">https://reborn-speaking.practice/example</span>
+                <button class="btn btn-primary btn-sm" id="copyUrlBtn"><i class="fas fa-copy"></i> 复制</button>
+            </div>
+            <div style="margin-top:10px;">
+                <a href="#" class="btn btn-outline btn-sm" id="previewBtn" target="_blank"><i class="fas fa-external-link-alt"></i> 预览学生端</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+    <i class="fas fa-feather-alt" style="color:#48A89E; margin-right:6px;"></i>
+    © 2026 Reborn 新生留学 · 口语跟读听辨小助手
+</footer>
+
+<!-- ============================================================ -->
+<script>
+(function() {
+    // ----- 日期显示 -----
+    const now = new Date();
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('currentDate').textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()];
+
+    // ----- DOM refs -----
+    const textTab = document.getElementById('textTab');
+    const fileTab = document.getElementById('fileTab');
+    const textInputContainer = document.getElementById('textInputContainer');
+    const fileUploadContainer = document.getElementById('fileUploadContainer');
+    const textInput = document.getElementById('textInput');
+    const wordCount = document.getElementById('wordCount');
+    const fileInput = document.getElementById('fileInput');
+    const fileSelectBtn = document.getElementById('fileSelectBtn');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const processBtn = document.getElementById('processBtn');
+    const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const sentencePreviewContainer = document.getElementById('sentencePreviewContainer');
+    const sentencesList = document.getElementById('sentencesList');
+    const sentenceCount = document.getElementById('sentenceCount');
+    const resultContainer = document.getElementById('resultContainer');
+    const studentUrl = document.getElementById('studentUrl');
+    const copyUrlBtn = document.getElementById('copyUrlBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const playTestContainer = document.getElementById('playTestContainer');
+    const testSentence = document.getElementById('testSentence');
+    const testPlayBtn = document.getElementById('testPlayBtn');
+    const testNextBtn = document.getElementById('testNextBtn');
+    const statsContainer = document.getElementById('statsContainer');
+    const statTotalWords = document.getElementById('statTotalWords');
+    const statTotalSentences = document.getElementById('statTotalSentences');
+    const statAvgLength = document.getElementById('statAvgLength');
+    const statDuration = document.getElementById('statDuration');
+    const voiceSelector = document.getElementById('voiceSelector');
+
+    let currentSentences = [];
+    let practiceData = {};
+    let testSentenceIndex = 0;
+    let selectedVoice = 'ms-henge'; // 默认
+
+    const testSentences = [
+        "Good morning, class. Today we're going to practice some useful English expressions.",
+        "If you want to ask for help, you can say 'Could you please help me with this?'",
+        "The quick brown fox jumps over the lazy dog. This sentence contains all letters.",
+        "Practice makes perfect. Keep repeating these sentences to improve your pronunciation.",
+        "When saying goodbye, you can use phrases like 'It was nice talking to you'."
+    ];
+
+    // ----- 声线映射 -----
+    const voiceMap = {
+        'ms-henge': { label: 'Ms. Henge', type: 'uk', pitch: 1.0, rate: 0.9, gender: 'female', age: 'adult' },
+        'lily': { label: 'Lily', type: 'us', pitch: 1.0, rate: 0.9, gender: 'female', age: 'adult' }
+    };
+
+    // ----- 声线按钮切换 -----
+    voiceSelector.addEventListener('click', function(e) {
+        const btn = e.target.closest('.voice-btn');
+        if (!btn) return;
+        voiceSelector.querySelectorAll('.voice-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedVoice = btn.dataset.voice;
+    });
+
+    // ----- Speech -----
+    let speechSynth = window.speechSynthesis;
+
+    function speakText(text, voiceKey) {
+        if (speechSynth.speaking) speechSynth.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+
+        const vKey = voiceKey || selectedVoice;
+        const vParams = voiceMap[vKey] || voiceMap['ms-henge'];
+        utter.rate = vParams.rate || 0.9;
+        utter.pitch = vParams.pitch || 1.0;
+        utter.volume = 1.0;
+
+        const voices = speechSynth.getVoices();
+        const targetLang = vParams.type === 'uk' ? 'en-GB' : 'en-US';
+        let candidates = voices.filter(v => v.lang === targetLang);
+        if (candidates.length === 0) {
+            candidates = voices.filter(v => v.lang.startsWith('en'));
+        }
+
+        let matchedVoice = null;
+        if (candidates.length > 0) {
+            for (let v of candidates) {
+                const name = v.name.toLowerCase();
+                const isFemale = name.includes('female') || name.includes('samantha') || name.includes('victoria') || name.includes('kate') || name.includes('zira') || name.includes('ava');
+                if (vParams.gender === 'female' && isFemale) {
+                    matchedVoice = v;
+                    break;
+                }
+            }
+            if (!matchedVoice) {
+                matchedVoice = candidates[0];
+            }
+        }
+
+        if (matchedVoice) {
+            utter.voice = matchedVoice;
+        }
+
+        speechSynth.speak(utter);
+        return utter;
+    }
+
+    // ----- helpers -----
+    function updateWordCount() {
+        const t = textInput.value.trim();
+        wordCount.textContent = t === '' ? 0 : t.split(/\s+/).length;
+    }
+    textInput.addEventListener('input', updateWordCount);
+
+    function escapeHtml(text) {
+        const d = document.createElement('div');
+        d.textContent = text;
+        return d.innerHTML;
+    }
+
+    // ----- 按空行分割 -----
+    function splitByEmptyLines(text) {
+        if (!text.trim()) return [];
+        const parts = text.split(/\n\s*\n/);
+        return parts.map(p => p.trim()).filter(p => p.length > 0);
+    }
+
+    // ----- 计算统计 -----
+    function calculateStats(sentences) {
+        let totalWords = 0;
+        sentences.forEach(s => {
+            const words = s.trim().split(/\s+/).filter(w => w.length > 0);
+            totalWords += words.length;
+        });
+        const sentenceCount = sentences.length;
+        const avgLength = sentenceCount > 0 ? Math.round((totalWords / sentenceCount) * 10) / 10 : 0;
+
+        const wordsPerSecond = 2.5;
+        let totalSeconds = totalWords / wordsPerSecond;
+        if (totalSeconds > 20) {
+            totalSeconds += 5;
+        } else if (totalSeconds > 10) {
+            totalSeconds += 2;
+        }
+        totalSeconds = Math.ceil(totalSeconds);
+
+        return { totalWords, sentenceCount, avgLength, totalSeconds };
+    }
+
+    function updateStats(sentences) {
+        const stats = calculateStats(sentences);
+        statTotalWords.textContent = stats.totalWords;
+        statTotalSentences.textContent = stats.sentenceCount;
+        statAvgLength.textContent = stats.avgLength;
+        statDuration.textContent = stats.totalSeconds;
+        statsContainer.classList.remove('hidden');
+    }
+
+    // ----- 智能断句（回退用） -----
+    function smartSegment(text) {
+        const parts = splitByEmptyLines(text);
+        if (parts.length > 1) return parts;
+
+        let raw = text.split(/(?<=[.!?])\s+/);
+        const markers = [' and ', ' but ', ' or ', ' so ', ' however ', ' therefore ', ' although ', ' though ', ' because ', ' since ', ' if ', ' when ', ' while ', ' before ', ' after ', ' that ', ' which ', ' who ', ' whom ', ' whose ', ' where ', ' why '];
+        let result = [];
+        for (let s of raw) {
+            if (s.length <= 120) { result.push(s.trim()); continue; }
+            let parts2 = [s];
+            for (let m of markers) {
+                let newParts = [];
+                for (let p of parts2) {
+                    let splitArr = p.split(new RegExp(`(${m})`, 'gi'));
+                    if (splitArr.length > 1) {
+                        let cur = '';
+                        for (let seg of splitArr) {
+                            if (markers.some(mm => seg.toLowerCase().includes(mm.trim()))) {
+                                if (cur.trim()) newParts.push(cur.trim());
+                                cur = seg;
+                            } else {
+                                cur += seg;
+                            }
+                        }
+                        if (cur.trim()) newParts.push(cur.trim());
+                    } else {
+                        newParts.push(p);
+                    }
+                }
+                parts2 = newParts;
+            }
+            let finalParts = [];
+            for (let p of parts2) {
+                if (p.length > 80 && p.includes(',')) {
+                    let sub = p.split(/(?<=,)\s+/);
+                    let combined = '';
+                    for (let sp of sub) {
+                        if ((combined + sp).split(/\s+/).length <= 15) {
+                            combined += (combined ? ' ' : '') + sp;
+                        } else {
+                            if (combined) finalParts.push(combined);
+                            combined = sp;
+                        }
+                    }
+                    if (combined) finalParts.push(combined);
+                } else {
+                    finalParts.push(p);
+                }
+            }
+            result.push(...finalParts.map(x => x.trim()).filter(x => x.length > 0));
+        }
+        return result;
+    }
+
+    function displayPreview(sentences) {
+        sentencesList.innerHTML = '';
+        sentenceCount.textContent = sentences.length;
+        sentences.forEach((s, idx) => {
+            const div = document.createElement('div');
+            div.className = 'sentence-item';
+            div.innerHTML = `
+                <span class="num">${idx+1}</span>
+                <span class="text">${escapeHtml(s)}</span>
+                <button class="play-single" data-idx="${idx}"><i class="fas fa-volume-up"></i></button>
+            `;
+            sentencesList.appendChild(div);
+        });
+        document.querySelectorAll('.play-single').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const idx = parseInt(this.dataset.idx);
+                speakText(sentences[idx], selectedVoice);
+            });
+        });
+        if (sentences.length) {
+            testSentence.textContent = sentences[0];
+            testSentenceIndex = 0;
+            playTestContainer.classList.remove('hidden');
+        } else {
+            playTestContainer.classList.add('hidden');
+        }
+        updateStats(sentences);
+    }
+
+    // ----- 清空 -----
+    clearBtn.addEventListener('click', function() {
+        if (textInput.value.trim() === '' && currentSentences.length === 0) {
+            return;
+        }
+        if (confirm('确认清空所有内容？')) {
+            textInput.value = '';
+            updateWordCount();
+            currentSentences = [];
+            practiceData = {};
+            sentencePreviewContainer.classList.add('hidden');
+            statsContainer.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            generateBtn.disabled = true;
+            playTestContainer.classList.add('hidden');
+            sentencesList.innerHTML = '';
+            sentenceCount.textContent = '0';
+            if (speechSynth.speaking) speechSynth.cancel();
+            testSentence.textContent = testSentences[0];
+            testSentenceIndex = 0;
+        }
+    });
+
+    // ----- Tabs -----
+    textTab.addEventListener('click', function() {
+        textTab.classList.add('active');
+        fileTab.classList.remove('active');
+        textInputContainer.style.display = 'block';
+        fileUploadContainer.style.display = 'none';
+    });
+    fileTab.addEventListener('click', function() {
+        fileTab.classList.add('active');
+        textTab.classList.remove('active');
+        textInputContainer.style.display = 'none';
+        fileUploadContainer.style.display = 'block';
+    });
+
+    // ----- File -----
+    fileSelectBtn.addEventListener('click', () => fileInput.click());
+    fileUploadArea.addEventListener('dragover', (e) => { e.preventDefault(); fileUploadArea.style.borderColor = '#48A89E'; });
+    fileUploadArea.addEventListener('dragleave', () => { fileUploadArea.style.borderColor = '#D1D0C8'; });
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#D1D0C8';
+        if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', function() { if (this.files.length) handleFile(this.files[0]); });
+
+    function handleFile(file) {
+        const ext = '.' + file.name.split('.').pop().toLowerCase();
+        const valid = ['.txt','.doc','.docx','.xls','.xlsx','.pdf'];
+        if (!valid.includes(ext)) {
+            alert('暂不支持此格式，请使用 ' + valid.join(' '));
+            return;
+        }
+        fileName.textContent = file.name;
+        fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+        fileInfo.classList.remove('hidden');
+        if (ext === '.txt') {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                textInput.value = e.target.result;
+                updateWordCount();
+            };
+            reader.readAsText(file);
+        } else {
+            setTimeout(() => {
+                textInput.value = `This is sample text extracted from a ${ext.toUpperCase()} file.\n\nYou can use this tool to create speaking practice exercises. The system will automatically split the text into appropriate sentences for students to repeat.\n\nAfter each sentence is played, there will be a pause for the student to repeat it. The student can also navigate between sentences and control the playback.`;
+                updateWordCount();
+            }, 400);
+        }
+    }
+
+    // ----- Process -----
+    processBtn.addEventListener('click', function() {
+        const raw = textInput.value.trim();
+        if (!raw) { alert('请先输入或上传练习内容'); return; }
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 处理中...';
+        setTimeout(() => {
+            let sentences = splitByEmptyLines(raw);
+            if (sentences.length <= 1) {
+                sentences = smartSegment(raw);
+            }
+            if (sentences.length === 0) {
+                sentences = raw.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(s => s.length > 0);
+            }
+            if (sentences.length === 0) {
+                sentences = ['无法识别句子，请检查内容格式。'];
+            }
+
+            currentSentences = sentences;
+            practiceData = {
+                sentences: currentSentences,
+                voice: selectedVoice,
+                timestamp: Date.now(),
+                title: raw.substring(0, 48) + (raw.length > 48 ? '…' : '')
+            };
+            displayPreview(currentSentences);
+            sentencePreviewContainer.classList.remove('hidden');
+            generateBtn.disabled = false;
+            resultContainer.classList.add('hidden');
+            this.innerHTML = '<i class="fas fa-cogs"></i> 处理内容';
+            this.disabled = false;
+            sentencePreviewContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 600);
+    });
+
+    // ----- Generate -----
+    generateBtn.addEventListener('click', function() {
+        if (!currentSentences.length) { alert('请先处理内容'); return; }
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
+        setTimeout(() => {
+            const encoded = btoa(encodeURIComponent(JSON.stringify(practiceData)));
+            const url = window.location.href.split('#')[0] + '#student-practice?data=' + encoded;
+            studentUrl.textContent = url;
+            previewBtn.href = url;
+            resultContainer.classList.remove('hidden');
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+            this.innerHTML = '<i class="fas fa-link"></i> 生成练习链接';
+            this.disabled = false;
+        }, 500);
+    });
+
+    // ----- Copy -----
+    copyUrlBtn.addEventListener('click', function() {
+        const url = studentUrl.textContent;
+        navigator.clipboard.writeText(url).then(() => {
+            const orig = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-check"></i> 已复制';
+            setTimeout(() => { this.innerHTML = orig; }, 1800);
+        }).catch(() => alert('复制失败，请手动复制'));
+    });
+
+    // ----- Test play -----
+    testPlayBtn.addEventListener('click', function() {
+        const txt = testSentence.textContent;
+        if (txt) {
+            const utter = speakText(txt, selectedVoice);
+            this.innerHTML = '<i class="fas fa-volume-up"></i> 播放中…';
+            this.disabled = true;
+            if (utter) {
+                utter.onend = () => {
+                    this.innerHTML = '<i class="fas fa-volume-up"></i> 播放';
+                    this.disabled = false;
+                };
+            } else {
+                this.innerHTML = '<i class="fas fa-volume-up"></i> 播放';
+                this.disabled = false;
+            }
+        }
+    });
+
+    testNextBtn.addEventListener('click', function() {
+        testSentenceIndex = (testSentenceIndex + 1) % testSentences.length;
+        testSentence.textContent = testSentences[testSentenceIndex];
+    });
+
+    // ----- Example -----
+    const example = `Good morning, class. Today we're going to practice some useful English expressions that you can use in everyday conversations.
+
+First, let's start with greetings. You can say "Hello, how are you?" or "Hi, what's up?" to your friends.
+
+If you want to ask for help, you can say "Could you please help me with this?" or "I'm having trouble with this, could you give me a hand?"
+
+When you're in a store and need assistance, you can say "Excuse me, where can I find the dairy section?" or "Do you have this in a larger size?"
+
+Finally, when saying goodbye, you can use phrases like "It was nice talking to you" or "Have a great day!"`;
+    textInput.value = example;
+    updateWordCount();
+    testSentence.textContent = testSentences[0];
+
+    if (speechSynth.getVoices().length === 0) {
+        speechSynth.addEventListener('voiceschanged', () => {});
+    }
+
+    // ----- Student Route -----
+    function loadStudentPage() {
+        const hash = window.location.hash;
+        if (!hash.includes('student-practice')) return false;
+        const query = hash.split('?')[1];
+        if (!query) return false;
+        const params = new URLSearchParams(query);
+        const data = params.get('data');
+        if (!data) return false;
+        try {
+            const decoded = decodeURIComponent(atob(data));
+            const pd = JSON.parse(decoded);
+            if (!pd.sentences || !pd.sentences.length) return false;
+            renderStudentPage(pd);
+            return true;
+        } catch (e) { return false; }
+    }
+
+    function renderStudentPage(pd) {
+        document.body.innerHTML = '';
+        const container = document.createElement('div');
+        container.className = 'student-container';
+        document.body.appendChild(container);
+
+        const voiceLabel = voiceMap[pd.voice] ? voiceMap[pd.voice].label : 'Ms. Henge';
+        const voiceType = voiceMap[pd.voice] ? voiceMap[pd.voice].type : 'uk';
+
+        container.innerHTML = `
+            <header class="topbar" style="max-width:1280px; width:100%; border-radius:0 0 24px 24px;">
+                <div class="brand">
+                    <i class="fas fa-feather-alt"></i>
+                    <h1>Reborn 新生留学</h1>
+                    <span class="badge">跟读练习</span>
+                </div>
+                <div class="user">
+                    <span class="greeting">天天进步，每日新生！</span>
+                    <div class="avatar" style="background:rgba(255,255,255,0.3);">S</div>
+                </div>
+            </header>
+
+            <div class="main-container" style="max-width:1280px; padding:24px 32px;">
+                <div class="main-card" style="padding:28px 32px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+                        <h2 style="font-size:1.2rem; font-weight:700; color:#121212;"><i class="fas fa-bullseye" style="color:#48A89E;"></i> 跟读训练</h2>
+                        <span style="background:#E4EDD8; padding:4px 16px; border-radius:40px; font-size:0.85rem; color:#48A89E; font-weight:600;">${voiceType === 'uk' ? '🇬🇧 英音' : '🇺🇸 美音'} · ${voiceLabel}</span>
+                    </div>
+                    <div style="background:#F9F7E8; border-radius:16px; padding:12px 18px; margin-bottom:20px; color:#777770; border:1px solid #E8E6D8;">
+                        <i class="fas fa-info-circle" style="color:#48A89E;"></i> 听句子 → 跟读练习，可反复播放。
+                    </div>
+
+                    <div style="text-align:center; background:#FFFFFF; border-radius:24px; padding:28px 16px; border:1px solid #F9F7E8; box-shadow:0 2px 12px rgba(0,0,0,0.02);">
+                        <div style="font-size:0.9rem; color:#777770;">进度 <span id="stuProgress">1</span> / ${pd.sentences.length}</div>
+                        <div id="stuCurrentSentence" style="font-size:1.6rem; font-weight:500; line-height:1.6; margin:18px 0 22px; min-height:70px; display:flex; align-items:center; justify-content:center; padding:0 10px; color:#121212;">${escapeHtml(pd.sentences[0])}</div>
+                        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+                            <button class="btn btn-outline" id="stuPrev"><i class="fas fa-backward"></i> 上一句</button>
+                            <button class="btn btn-primary" id="stuPlay"><i class="fas fa-volume-up"></i> 播放</button>
+                            <button class="btn btn-outline" id="stuNext">下一句 <i class="fas fa-forward"></i></button>
+                            <button class="btn btn-outline" id="stuRepeat"><i class="fas fa-redo"></i> 重播</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:24px;">
+                        <div style="font-weight:600; margin-bottom:8px; color:#121212;"><i class="fas fa-list-ul" style="color:#48A89E;"></i> 全部句子</div>
+                        <div class="sentences-list" id="stuSentenceList" style="max-height:180px;"></div>
+                    </div>
+                    <div style="margin-top:18px; text-align:center;">
+                        <button class="btn btn-outline" id="stuBack"><i class="fas fa-arrow-left"></i> 返回老师端</button>
+                    </div>
+                </div>
+                <div style="text-align:center; padding:18px 0 6px; color:#A3A39A; font-size:0.85rem; border-top:1px solid #E8E6D8; margin-top:16px;">
+                    <i class="fas fa-feather-alt" style="color:#48A89E;"></i> Reborn 新生留学 · 口语跟读
+                </div>
+            </div>
+        `;
+
+        // Student logic
+        const sentences = pd.sentences;
+        let idx = 0, playing = false;
+        const stuCurrent = document.getElementById('stuCurrentSentence');
+        const stuProgress = document.getElementById('stuProgress');
+        const stuPlay = document.getElementById('stuPlay');
+        const stuPrev = document.getElementById('stuPrev');
+        const stuNext = document.getElementById('stuNext');
+        const stuRepeat = document.getElementById('stuRepeat');
+        const stuBack = document.getElementById('stuBack');
+        const stuList = document.getElementById('stuSentenceList');
+        const studentVoice = pd.voice || 'ms-henge';
+
+        function renderList() {
+            stuList.innerHTML = sentences.map((s, i) => `
+                <div class="sentence-item" data-idx="${i}" style="${i === idx ? 'background:#E4EDD8; border-radius:12px;' : 'background:#FFFFFF;'}">
+                    <span class="num">${i+1}</span>
+                    <span class="text">${escapeHtml(s)}</span>
+                </div>
+            `).join('');
+            stuList.querySelectorAll('.sentence-item').forEach(el => {
+                el.addEventListener('click', function() {
+                    const ni = parseInt(this.dataset.idx);
+                    if (!isNaN(ni) && ni >= 0 && ni < sentences.length) {
+                        idx = ni; updateDisplay();
+                        if (playing) { speechSynth.cancel(); playing = false; stuPlay.innerHTML = '<i class="fas fa-volume-up"></i> 播放'; }
+                    }
+                });
+            });
+        }
+
+        function updateDisplay() {
+            stuCurrent.textContent = sentences[idx];
+            stuProgress.textContent = idx + 1;
+            renderList();
+        }
+
+        function playCurrent() {
+            if (playing) { speechSynth.cancel(); playing = false; stuPlay.innerHTML = '<i class="fas fa-volume-up"></i> 播放'; return; }
+            const utter = speakText(sentences[idx], studentVoice);
+            stuPlay.innerHTML = '<i class="fas fa-pause"></i> 播放中…';
+            playing = true;
+            if (utter) {
+                utter.onend = () => { playing = false; stuPlay.innerHTML = '<i class="fas fa-volume-up"></i> 播放'; };
+            } else {
+                playing = false;
+                stuPlay.innerHTML = '<i class="fas fa-volume-up"></i> 播放';
+            }
+        }
+
+        stuPlay.addEventListener('click', playCurrent);
+        stuPrev.addEventListener('click', () => { if (idx > 0) { idx--; updateDisplay(); if (playing) { speechSynth.cancel(); playing = false; stuPlay.innerHTML = '<i class="fas fa-volume-up"></i> 播放'; } } });
+        stuNext.addEventListener('click', () => { if (idx < sentences.length - 1) { idx++; updateDisplay(); if (playing) { speechSynth.cancel(); playing = false; stuPlay.innerHTML = '<i class="fas fa-volume-up"></i> 播放'; } } });
+        stuRepeat.addEventListener('click', playCurrent);
+        stuBack.addEventListener('click', () => { window.location.hash = ''; window.location.reload(); });
+        updateDisplay();
+    }
+
+    window.addEventListener('load', function() {
+        if (!loadStudentPage()) { /* teacher mode */ }
+    });
+    window.addEventListener('hashchange', function() {
+        if (window.location.hash.includes('student-practice')) {
+            window.location.reload();
+        }
+    });
+})();
+</script>
+</body>
+</html>
